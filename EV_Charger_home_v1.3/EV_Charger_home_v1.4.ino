@@ -12,15 +12,15 @@
 SoftwareSerial pzemSWSerial(PZEM_RX_PIN, PZEM_TX_PIN);
 PZEM004Tv30 pzem(pzemSWSerial);
 //----------Could be changed-----------------
-const int min_volt = 202;
+const int min_volt = 203;
 volatile byte amper = 6;
-int cur_load = 192;
-int old_load = 192;
-char ver[]="1.3";
+int cur_load = 160;
+int old_load = 160;
+char ver[]="1.4";
 //----------Do not change----------------
 const int rs = 12, en = 11, d4 = 5, d5 = 4, d6 = 3, d7 = 2;
 LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
-int analogPin = A6; 
+int analogPin = A6;
 int state = 0;
 int oldState = 0;
 int minus = 1;
@@ -205,7 +205,7 @@ void debug_mode(){
      lcd.print("                    ");
      lcd.setCursor(0, 0);       
      lcd.print("Ready to charge");
-     Timer1.pwm(10,448);  // set 18A of current
+     Timer1.pwm(10, cur_load);  // set "cur_load" of current
         while (true){  // "Ready to charge" cycle
             int i = 0;
             int val = 0;  // variable to store the value read
@@ -233,7 +233,7 @@ void debug_mode(){
      lcd.print("                    ");   
      lcd.setCursor(0, 0);    
      lcd.print("Charging");
-     Timer1.pwm(10,160);  // set 10A of current
+     Timer1.pwm(10, cur_load);  // set "cur_load" of current
      analogWrite(A0, 255);
         while (true){  // "Charging" cycle
             int i = 0;
@@ -307,8 +307,10 @@ void check_voltage(){   //This function reading voltage from "PZEM"
         cents2 = 0;
         read_voltage();
         if (voltage > 190 && voltage < min_volt) {
-          cur_load -= 32;
+          cur_load -= 16;
           amper--;
+          lcd.setCursor(16, 1);
+          lcd.print("*");
             }
         }
     }
@@ -512,94 +514,94 @@ void button() {     //This function is reading buttons and defining desired carg
 
         if (amper < 1 ) {
         amper = 1;
-        Timer1.pwm(10,112);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,80);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 5A");
         }
         else if (amper == 1) {
-        Timer1.pwm(10,112);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,80);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 5A");
         }
         else if (amper == 2) {
-        Timer1.pwm(10,128);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,96);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 6A");
         }
         else if (amper == 3) {
-        Timer1.pwm(10,1144);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,112);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 7A");
         }
         else if (amper == 4) {
-        Timer1.pwm(10,160);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,128);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 8A");
         }
         else if (amper == 5) {
-        Timer1.pwm(10,176);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,144);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print(" 9A");
         }
         else if (amper == 6) {
-        Timer1.pwm(10,192);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,160);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("10A");
         }
         else if (amper == 7) {
-        Timer1.pwm(10,208);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,176);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("11A");
         }
         else if (amper == 8) {
-        Timer1.pwm(10,224);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,192);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("12A");
         }
         else if (amper == 9) {
-        Timer1.pwm(10,240);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,208);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("13A");
         }
         else if (amper == 10) {
-        Timer1.pwm(10,256);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,224);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("14A");
         }
         else if (amper == 11) {
-        Timer1.pwm(10,272);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,240);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("15A");
         }
         else if (amper > 11) {
         amper = 11;
-        Timer1.pwm(10,272);
-        lcd.setCursor(17, 1);
-        lcd.print("   ");
+        Timer1.pwm(10,240);
+        lcd.setCursor(16, 1);
+        lcd.print("    ");
         lcd.setCursor(17, 1);
         lcd.print("15A");
         }
